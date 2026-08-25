@@ -37,18 +37,18 @@
      DESIGN TOKENS
      ============================================================ */
   :root{
-    --paper:      #F1F3EE;
-    --paper-2:    #E7EAE1;
+    --paper:      #F0F2F6;
+    --paper-2:    #E5E9F0;
     --ink:        #14192B;
     --ink-soft:   #565E70;
-    --ink-faint:  #8A917F;
+    --ink-faint:  #868B9C;
     --navy:       #0E1424;
     --navy-2:     #171F38;
-    --stable:     #2B6E63;
-    --stable-lt:  #6FA79B;
-    --unstable:   #AE4A2E;
-    --unstable-lt:#CC8163;
-    --line:       #D7DAD0;
+    --stable:     #A54709;   /* deepened RedOrange — for the light paper background: links, tags, chevron */
+    --stable-lt:  #FF9F5A;   /* lighter tint, for the dark navy hero/footer — unchanged, this already works */
+    --unstable:   #0F50B3;   /* deepened RoyalBlue — for the light paper background: § marks, dots, badges */
+    --unstable-lt:#7FB0FF;   /* lighter tint, for the dark navy hero/footer — unchanged, this already works */
+    --line:       #D9DCE3;
     --line-navy:  rgba(241,243,238,0.14);
     --sand:       #C2B280;
     --orange:     #d8a40a;
@@ -76,7 +76,7 @@
   a{ color: var(--stable); text-decoration: none; }
   a:hover{ text-decoration: underline; text-underline-offset: 3px; }
   a:focus-visible, button:focus-visible{
-    outline: 2px solid var(--unstable);
+    outline: 2px solid var(--stable);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -172,6 +172,23 @@
   .section-head .eyebrow::before{ color: var(--unstable); }
   .section-head h2{ font-size: 26px; color: var(--ink); }
   .section-head p.lede{ margin-top:8px; color: var(--ink-soft); max-width: 60ch; font-size: 15px; }
+  .section-head p.lede .hl{ color: var(--unstable); font-weight: 500; }
+
+  /* Collapsible sections */
+  main section .section-head{ margin-bottom: 34px; }
+  main section .section-head h2.collapsible{
+    display:inline-flex; align-items:center; gap:12px;
+    cursor:pointer; user-select:none;
+  }
+  main section .section-head h2.collapsible .chevron{
+    font-family: var(--font-mono); font-size: 22px; line-height:1; color: var(--stable);
+    transition: transform 0.2s ease; flex-shrink:0; transform: rotate(180deg); /* expanded = points up */
+    position: relative; top: 0.15em;   /* ← tweak this to nudge the arrow up/down */
+  }
+  main section.collapsed{ padding-bottom: 34px; }
+  main section.collapsed .section-head{ margin-bottom: 0; }
+  main section.collapsed .section-head h2.collapsible .chevron{ transform: rotate(0deg); } /* collapsed = points down */
+  main section.collapsed > .wrap > *:not(.section-head){ display:none; }
 
   /* About */
   .about-grid{ display:grid; grid-template-columns: 1.5fr 1fr; gap: 40px; }
@@ -204,7 +221,7 @@
   .facts a:hover{ color: var(--stable); }
 
   /* Research cards */
-  .research-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .research-grid{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
   .research-card{
     border: 1px solid var(--line); border-radius: 4px; overflow:hidden;
     background: #fff;
@@ -315,13 +332,15 @@
 
   <div class="topbar">
     <div class="wrap">
-      <div class="mark">Pietro Valigi <span>·</span> Theoretical Physics</div>
+      <div class="mark">Pietro Valigi <span>·</span> Theoretical&nbsp;Physics</div>
       <nav class="topnav">
         <a href="#about">About</a>
         <a href="#research">Research</a>
         <a href="#publications">Publications</a>
         <a href="#timeline">Timeline</a>
         <a href="#projects">Projects</a>
+        <a href="#talks">Talks</a>
+        <a href="#service">Service</a>
         <a href="#contact">Contact</a>
       </nav>
     </div>
@@ -370,7 +389,7 @@
         <div class="section-head">
           <div class="eyebrow">research lines</div>
           <h2>What I am interested in</h2>
-          <p class="lede">Two threads, one toolbox: statistical physics of disordered systems.</p>
+          <p class="lede">Three threads, one toolbox: the <span class="hl">statistical physics of disordered systems</span>, applied to stability, ecology, and learning.</p>
         </div>
         <div class="research-grid" id="research-grid"></div>
       </div>
@@ -407,25 +426,24 @@
       </div>
     </section>
 
-    <section id="talks-service">
+    <section id="talks">
       <div class="wrap">
-        <div class="two-col">
-          <div>
-            <div class="section-head">
-              <div class="eyebrow">talks</div>
-              <h2>Talks &amp; presentations</h2>
-            </div>
-            <div id="talks-list"></div>
-          </div>
-          <div>
-            <div class="section-head">
-              <div class="eyebrow">service</div>
-              <h2>Teaching, mentoring &amp; service</h2>
-            </div>
-            <ul class="service-list" id="service-list"></ul>
-            <div class="skills-row" id="skills-row"></div>
-          </div>
+        <div class="section-head">
+          <div class="eyebrow">talks</div>
+          <h2>Talks &amp; presentations</h2>
         </div>
+        <div id="talks-list"></div>
+      </div>
+    </section>
+
+    <section id="service">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="eyebrow">service</div>
+          <h2>Teaching, mentoring &amp; service</h2>
+        </div>
+        <ul class="service-list" id="service-list"></ul>
+        <div class="skills-row" id="skills-row"></div>
       </div>
     </section>
 
@@ -436,7 +454,9 @@
       <h2>Get in touch</h2>
       <p>Open to conversations on random matrix theory, theoretical ecology, and disordered systems physics — reach out by email! </p>
       <div class="contact-links" id="contact-links"></div>
-      <div class="foot-note">Static page · no build step · edit the DATA object in this file to update content.</div>
+      <!-- Dev note, kept for reference, not shown on the page:
+           Static page · no build step · edit the DATA object in this file to update content. -->
+      <div class="foot-note" id="foot-note"></div>
       <div class="footer-logo-wrap">
         <div class="footer-logo" id="footer-logo"></div>
       </div>
@@ -482,8 +502,9 @@ const DATA = {
   orcid: "0009-0007-1593-1325",
   scholar: "https://scholar.google.it/citations?user=fwHk4o4AAAAJ",
   github: "https://github.com/kingofbroccoli",
-  photo: "Broccoli_Vesuvio.jpg",   // e.g. "images/pietro.jpg" — shows nothing until you set this
-  logo: "Broccoli_Logo.svg", // the footer badge — see the file provided alongside this one
+  photo: "images/Broccoli_Vesuvio.jpg",   // e.g. "images/pietro.jpg" — shows nothing until you set this
+  logo: "images/Broccoli_Logo.svg", // the footer badge — see the file provided alongside this one
+  footerNote: "Local stability requires a balanced diet — remember to eat broccoli.",
 
   bio: [
     "I'm a Research Associate in the Department of Mathematical Sciences at the University of Bath, working with Prof. Tim Rogers. Before that I was a postdoctoral researcher at Sapienza University of Rome, and I completed my PhD there in 2025 under the supervision of Prof. Chiara Cammarota.",
@@ -502,13 +523,19 @@ const DATA = {
 
   research: [
     {
-      tag: "Random matrices · ecology",
-      title: "Stability of large complex ecosystems",
-      text: "Using spectral theory of sparse, asymmetric random matrices to understand when large ecological networks remain stable", //  — including the rare outlier eigenvalues that can tip a system past its stability boundary.
-      //image: null   // e.g. "images/ecology-sketch.png" — see instructions in RENDERING section below
+      tag: "Random Matrix Theory",
+      title: "Spectral stability of sparse random matrices",
+      text: "Using the spectral theory of sparse, asymmetric random matrices to understand the stability of large dynamical systems.",
+      //image: null   // e.g. "images/rmt-sketch.png" — see instructions in RENDERING section below
     },
     {
-      tag: "Disordered systems · Machine Learning",
+      tag: "Theoretical Ecology",
+      title: "Species-rich ecological models",
+      text: "Using tools from statistical physics to study the collective behaviour of species-rich ecosystems, where many species interact through a complex underlying network.",
+      //image: null   // e.g. "images/ecology-sketch.png"
+    },
+    {
+      tag: "Machine Learning",
       title: "Statistical physics of learning",
       text: "Applying tools from the statistical physics of disordered and glassy systems to fundamental models of machine learning.",
       //image: null   // e.g. "images/ml-sketch.png"
@@ -690,6 +717,8 @@ document.getElementById('footer-logo').innerHTML = DATA.logo
   ? `<img src="${DATA.logo}" alt="logo">`
   : '';
 
+document.getElementById('foot-note').textContent = DATA.footerNote;
+
 document.getElementById('contact-links').innerHTML = `
   <a href="mailto:${DATA.email}">${DATA.email}</a>
   <a href="https://orcid.org/${DATA.orcid}" target="_blank" rel="noopener">ORCID ↗</a>
@@ -762,7 +791,7 @@ const SPECTRUM_SCALE_Y  = 46;      // px per unit, imaginary axis
     const stable = p.x < boundaryX;
     const dot = document.createElementNS('http://www.w3.org/2000/svg','circle');
     dot.setAttribute('r', stable ? 1.6 : 2.1);
-    dot.setAttribute('fill', stable ? '#6FA79B' : '#CC8163');
+    dot.setAttribute('fill', stable ? '#6FA0FF' : '#FF6600');
     dot.setAttribute('opacity', stable ? '0.75' : '0.9');
     dot.setAttribute('class', 'eig-dot');
 
@@ -791,6 +820,44 @@ const SPECTRUM_SCALE_Y  = 46;      // px per unit, imaginary axis
     }));
   }
 })();
+
+/* ================================================================
+   COLLAPSIBLE SECTIONS
+   ---------------------------------------------------------------
+   Click a section's title (or its ▾/▴ arrow — same thing, the
+   arrow lives inside the title) to collapse it down to just the
+   heading. Only the title itself is clickable, not the whole
+   header block, so the eyebrow label and any intro sentence below
+   the title stay inert. About and Contact stay always open. This
+   only remembers your choice for the current page view — reloading
+   starts everyone back at fully expanded.
+   ================================================================ */
+document.querySelectorAll('main > section').forEach(section => {
+  if (section.id === 'about') return;
+  const head = section.querySelector(':scope > .wrap > .section-head');
+  const h2 = head && head.querySelector('h2');
+  if (!h2) return;
+
+  h2.classList.add('collapsible');
+  h2.setAttribute('role', 'button');
+  h2.setAttribute('tabindex', '0');
+  h2.setAttribute('aria-expanded', 'true');
+
+  const chevron = document.createElement('span');
+  chevron.className = 'chevron';
+  chevron.textContent = '▾';
+  chevron.setAttribute('aria-hidden', 'true');
+  h2.appendChild(chevron);
+
+  function toggle(){
+    const collapsed = section.classList.toggle('collapsed');
+    h2.setAttribute('aria-expanded', String(!collapsed));
+  }
+  h2.addEventListener('click', toggle);
+  h2.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+  });
+});
 </script>
 </body>
 </html>
