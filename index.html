@@ -209,6 +209,7 @@
     padding: 13px;
   }
   .footer-logo svg, .footer-logo img{ width:100%; height:100%; display:block; }
+  .footer-logo a{ display:block; width:100%; height:100%; }
   .facts{
     background: var(--paper-2); border: 1px solid var(--line);
     border-radius: 4px; padding: 22px 22px;
@@ -504,6 +505,7 @@ const DATA = {
   github: "https://github.com/kingofbroccoli",
   photo: "images/Broccoli_Vesuvio.jpg",   // e.g. "images/pietro.jpg" — shows nothing until you set this
   logo: "images/Broccoli_Logo.svg", // the footer badge — see the file provided alongside this one
+  gamesUrl: "games/whack-a-pietro.html",   // easter egg: clicking the footer logo opens this page
   footerNote: "Local stability requires a balanced diet — remember to eat broccoli.",
 
   bio: [
@@ -714,7 +716,7 @@ document.getElementById('skills-row').innerHTML = '<b>Skills —</b> ' + DATA.sk
 // To remove entirely: delete the <div class="footer-logo-wrap">...</div>
 // block in the HTML (just above </footer>) and this render block.
 document.getElementById('footer-logo').innerHTML = DATA.logo
-  ? `<img src="${DATA.logo}" alt="logo">`
+  ? `<a href="${DATA.gamesUrl}" aria-label="Logo"><img src="${DATA.logo}" alt="logo"></a>`
   : '';
 
 document.getElementById('foot-note').textContent = DATA.footerNote;
